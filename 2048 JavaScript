@@ -1,0 +1,448 @@
+document.addEventListener('DOMContentLoaded', () => {    //attend que le document soit chargé pour exécuter le code
+    const directionDiv = document.getElementById('direction');   //récupère l'élément avec l'ID 'direction'
+                                                                 //et le stocke dans la variable directionDiv
+
+    document.addEventListener('keydown', (e) => {   //ajoute un écouteur d'événement pour les touches du clavier, 
+                                                    //lorsque l'utilisateur appuie sur une touche, la fonction fléchée est exécutée
+        let direction;//crée une variable direction
+        switch (e.key) {   //vérifie la valeur de la touche appuyée
+            case 'ArrowUp'://si la touche appuyée est 'ArrowUp';la direction est 'haut'et la fonction up() est appelée
+                direction = 'haut';
+                up();
+                break;
+            case 'ArrowDown':
+                direction = 'bas';
+                down    ();
+                break;
+            case 'ArrowLeft':
+                direction = 'gauche';
+                left();
+                break;
+            case 'ArrowRight':
+                direction = 'droit';
+                right();
+                break;
+            default:
+                return; // Quitter si ce n'est pas une touche fléchée
+        }
+        console.log(direction);
+        directionDiv.textContent = direction;
+    });
+});
+
+// Fonction pour définir la valeur d'une cellule
+function setValue(i, j, value) { //définit la valeur d'une cellule
+    // Récupère la cellule à la position (i, j)
+    const cell = getCell(i, j);
+    
+    /*console.log(`settingvalue`)*/
+    // Si la cellule existe, définit son contenu texte
+    if (cell) {
+        cell.textContent = value; //définit le contenu texte de la cellule
+    }
+}
+
+// Fonction pour obtenir la valeur d'une cellule
+function getValue(i, j) { //récupère la valeur d'une cellule
+    // Récupère la cellule à la position (i, j)
+    const cell = getCell(i, j); //récupère la cellule à la position (i, j)
+    
+    // Retourne le contenu texte de la cellule si elle existe, sinon retourne null
+    /* console.log(cell.textContent)*/
+    return cell ? cell.textContent : null; 
+}
+
+// Fonction pour vérifier si une cellule est vide
+function isEmpty(i, j) { //vérifie si une cellule est vide
+    // Récupère la cellule à la position (i, j)
+    const cell = getCell(i, j); //récupère la cellule à la position (i, j)
+    
+    // Retourne true si la cellule existe et est vide, sinon retourne false
+    return cell ? cell.textContent === '' : false;
+}
+
+function getCell(i, j) {
+    // Sélectionne toutes les lignes du tableau avec la classe 'board'
+    const rows = document.querySelectorAll('.board tr'); //sélectionne toutes les lignes (<tr>) dans un tableau avec la classe 'board'
+    
+    // Vérifie si l'index de la ligne (j) est valide
+    if (j >= 0 && j < rows.length) {
+        // Sélectionne toutes les cellules de la ligne spécifiée
+        const cells = rows[j].querySelectorAll('td'); //sélectionne toutes les cellules (<td>) dans la ligne spécifiée par l'index j
+        
+        // Vérifie si l'index de la cellule (i) est valide
+        if (i >= 0 && i < cells.length) {
+            // Retourne la cellule spécifiée
+            /* console.log(cells[i]);*/
+            return cells[i];
+        }
+    }
+    
+    // Retourne null si les indices sont invalides
+    return null;
+}
+
+// Ajouter un écouteur d'événement pour DOMContentLoaded
+document.addEventListener('DOMContentLoaded', function() {
+   newGame();
+});
+
+
+// Définir la fonction newGame
+function newGame() { //fonction pour initialiser le jeu
+
+    let i = -1; //initialiser i à -1 pour la première case
+    let j = -1; //initialiser j à -1 pour la première case
+    let occupied = true; // si la case est occupée
+    //pour la premiere case 
+
+    while (occupied) {  //tant que la case est occupée alors on continue de chercher une case vide
+    //choisir i et j aléatoirement sachant que i compris entre 0 et 3 et j compris entre 0 et 3
+        i = Math.floor(Math.random() * 4); 
+        j = Math.floor(Math.random() * 4);
+        if (isEmpty(i,j)){  //si la case est vide alors on peut continuer la fonction
+            occupied = false; 
+        }
+    }
+
+    //dans 85% des cas la valeur de la case est 2 et dans 15% des cas la valeur de la case est 4
+    //mettre cette valeur dans une variable value
+
+    let value = Math.random() < 0.85 ? '2' : '4';
+
+    //utiliser setValue(i,j,value) pour mettre la valeur dans la case
+
+    setValue(i, j, value);
+
+    //pour la deuxième case
+    let i2 = -1;  
+    let j2 = -1;
+    occupied = true;
+    //choisr i et j aléatoirement sachant que i compris entre 0 et 3 et j compris entre 0 et 3
+    //faire en sorte que i et j soient différents de ceux de la première case
+    while (occupied) { //tant que la case est occupée alors on continue de chercher une case vide
+        i2 = Math.floor(Math.random() * 4);
+        j2 = Math.floor(Math.random() * 4);
+        if (isEmpty(i2,j2)){    //si la case est vide alors on peut continuer la fonction
+            occupied = false;
+        }
+    }
+
+    /* while (i2 === i && j2 === j) {
+        i2 = Math.floor(Math.random() * 4);
+        j2 = Math.floor(Math.random() * 4);
+    } */
+
+    //dans 60% des cas la valeur de la case est 2 et dans 40% des cas la valeur de la case est 4
+
+    let value2 = Math.random() < 0.60 ? '2' : '4';
+
+    //utiliser setValue(i,j,value) pour mettre la valeur dans la case
+
+    setValue(i2, j2, value2);
+}
+
+
+
+// Fonction pour déplacer les chiffres vers la droite
+function moveRight() {
+    const numRows = 4; // Nombre de lignes dans le tableau
+    const numCols = 4; // Nombre de colonnes dans le tableau
+
+    
+    // Parcourir chaque ligne du tableau (j collone et i ligne)
+    for (let j = 0; j < numRows; j++) { //pour chaque ligne du tableau on parcourt chaque colonne du tableau
+        for (let i = numCols - 2; i >= 0; i--) { //pour chaque colonne du tableau on parcourt chaque ligne du tableau
+            if (!isEmpty(i, j)) { //si la case n'est pas vide
+                // Trouver la première cellule vide à droite
+                let currentCol = i; //on initialise la variable currentCol à i
+               
+                /*console.log(`at ${currentCol},${j} : ${getValue(currentCol,j)}`);*/
+
+                while (currentCol < numCols - 1 && !isEmpty(currentCol, j)) { //tant que la case n'est pas vide et que la colonne est inférieure à la dernière colonne
+                    currentCol++; //on incrémente la colonne de 1 
+                    /*console.log(`changed currentCol to ${currentCol}}`);*/
+                }
+                // Déplacer la valeur vers la droite
+                if (isEmpty(currentCol,j)) { //si la case est vide alors on peut déplacer la valeur
+                    /*console.log(`final currentCol: ${currentCol}}`);*/
+                    setValue(currentCol, j, getValue(i, j)); //on met la valeur de la case i,j dans la case currentCol,j
+                    setValue(i, j, ''); //on vide la case i,j
+                    i = currentCol+1//pour éviter de déplacer la valeur vers la droite plusieurs
+                }
+                }    
+            }
+        }   
+    }
+
+    function moveLeft() {
+        const numRows = 4; // Nombre de lignes dans le tableau
+        const numCols = 4; // Nombre de colonnes dans le tableau
+    
+        // Parcourir chaque ligne du tableau
+        for (let j = 0; j < numRows; j++) { 
+            for (let i = 1; i < numCols; i++) { 
+                if (!isEmpty(i, j)) {
+                    // Trouver la première cellule vide à gauche
+                    let currentCol = i;
+                    
+    
+                    /*console.log(`at ${currentCol},${j} : ${getValue(currentCol,j)}`);*/
+    
+                    while (currentCol > 0 && !isEmpty(currentCol, j)) {
+                        currentCol--;
+                        /*console.log(`changed currentCol to ${currentCol}}`);*/
+                        
+                    }
+                    // Déplacer la valeur vers la gauche
+                    if (isEmpty(currentCol,j)) { //si la case est vide alors on peut déplacer la valeur
+                        /*console.log(`final currentCol: ${currentCol}}`);*/
+                        setValue(currentCol, j, getValue(i, j));
+                        setValue(i, j, '');
+                        i = currentCol-1//pour éviter de déplacer la valeur vers la gauche plusieurs fois
+                    }
+                    }    
+                }
+            }   
+        }
+    function moveUp() {
+        const numRows = 4; // Nombre de lignes dans le tableau
+        const numCols = 4; // Nombre de colonnes dans le tableau
+    
+        // Parcourir chaque colonne du tableau
+        for (let i = 0; i < numCols; i++) {
+            for (let j = 1; j < numRows; j++) {
+                if (!isEmpty(i, j)) {
+                    // Trouver la première cellule vide en haut
+                    let currentRow = j;
+                    
+    
+                    /*console.log(`at ${currentCol},${j} : ${getValue(currentCol,j)}`);*/
+    
+                    while (currentRow > 0 && !isEmpty(i, currentRow)) {
+                        currentRow--;
+                        /*console.log(`changed currentRow to ${currentRow}}`);*/
+                        
+                    }
+                    // Déplacer la valeur vers le haut
+                    if (isEmpty(i,currentRow)) { //si la case est vide alors on peut déplacer la valeur
+                        /*console.log(`final currentRow: ${currentRow}}`);*/
+                        setValue(i, currentRow, getValue(i, j));
+                        setValue(i, j, '');
+                        j = currentRow-1 //pour éviter de déplacer la valeur vers le haut plusieurs fois
+                    }
+                    }    
+                }
+            }   
+        }
+    
+    function moveDown() {
+        const numRows = 4; // Nombre de lignes dans le tableau
+        const numCols = 4; // Nombre de colonnes dans le tableau
+    
+        // Parcourir chaque colonne du tableau
+        for (let i = 0; i < numCols; i++) {
+            for (let j = numRows-2; j >= 0; j--) {
+                if (!isEmpty(i, j)) {
+                    // Trouver la première cellule vide en haut
+                    let currentRow = j;
+                    
+    
+                    /*console.log(`at ${currentCol},${j} : ${getValue(currentCol,j)}`);*/
+    
+                    while (currentRow < numRows-1 && !isEmpty(i, currentRow)) {
+                        currentRow++;
+                        /*console.log(`changed currentRow to ${currentRow}}`);*/
+                        
+                    }
+                    // Déplacer la valeur vers le haut
+                    if (isEmpty(i,currentRow)) { //si la case est vide alors on peut déplacer la valeur
+                        /* console.log(`final currentRow: ${currentRow}}`);*/
+                        setValue(i, currentRow, getValue(i, j));
+                        setValue(i, j, '');
+                        j =currentRow+1 //pour éviter de déplacer la valeur vers le bas plusieurs fois
+                    }
+                    }    
+                }
+            }
+        }   
+
+const table = document.getElementById('board'); // Assurez-vous que l'élément avec l'ID 'board' existe dans votre HTML
+
+
+
+
+// Fonction pour déplacer les chiffres vers la droite et fusionner les valeurs identiques
+function fusionRight() {
+    const numRows = 4; // Nombre de lignes dans le tableau
+    const numCols = 4; // Nombre de colonnes dans le tableau
+
+    // Parcourir chaque ligne du tableau
+    for (let j = 0; j < numRows; j++) { //pour chaque ligne du tableau on parcourt chaque colonne du tableau
+        for (let i = numCols - 2; i >= 0; i--) { //pour chaque colonne du tableau on parcourt chaque ligne du tableau
+            if (!isEmpty(i, j)) { //si la case n'est pas vide
+                
+                // Vérifier si la cellule à droite a la même valeur
+                if (getValue(i, j) === getValue(i+1, j)) { //si la valeur de la case i,j est égale à la valeur de la case i+1,j 
+                                                           // alors on peut fusionner les valeurs identiques
+                    /*console.log(`merging ${i},${j}`);*/
+
+                    // Fusionner les valeurs identiques
+                    /*console.log(`oldvals: ${getValue(i,j)},${getValue(i+1,j)}`);*/
+                    /*console.log(`newtargetval: ${2 * getValue(i,j)}`)*/
+                setValue(i+1, j, 2 * getValue(i, j));   //on met la valeur de la case i,j dans la case i+1,j
+                setValue(i, j, ''); //on vide la case i,j
+                
+                /*console.log(`newvals: ${getValue(i,j)},${getValue(i+1,j)}`);*/
+
+                }
+            }
+        }
+    }
+}
+
+
+// Fonction pour fusionner les valeurs identiques vers la gauche
+function fusionLeft() {
+    const numRows = 4; // Nombre de lignes dans le tableau
+    const numCols = 4; // Nombre de colonnes dans le tableau
+
+    // Parcourir chaque ligne du tableau
+    for (let j = 0; j < numRows; j++) {
+        for (let i = 1; i < numCols; i++) {
+            if (!isEmpty(i, j)) {
+                // Vérifier si la cellule à gauche a la même valeur
+                if (getValue(i, j) === getValue(i-1, j)) {
+                    // Fusionner les valeurs identiques
+                    setValue(i-1, j, 2 * getValue(i, j));
+                    setValue(i, j, '');
+                }
+            }
+        }
+    }
+}
+
+// Fonction pour fusionner les valeurs identiques vers le haut
+function fusionUp() {
+    const numRows = 4; // Nombre de lignes dans le tableau
+    const numCols = 4; // Nombre de colonnes dans le tableau
+
+    // Parcourir chaque colonne du tableau
+    for (let i = 0; i < numCols; i++) {
+        for (let j = 1; j < numRows; j++) {
+            if (!isEmpty(i, j)) {
+                // Vérifier si la cellule au-dessus a la même valeur
+                if (getValue(i, j) === getValue(i, j-1)) {
+                    // Fusionner les valeurs identiques
+                    setValue(i, j-1, 2 * getValue(i, j));
+                    setValue(i, j, '');
+                }
+            }
+        }
+    }
+}
+
+// Fonction pour fusionner les valeurs identiques vers le bas
+function fusionDown() {
+    const numRows = 4; // Nombre de lignes dans le tableau
+    const numCols = 4; // Nombre de colonnes dans le tableau
+
+    // Parcourir chaque colonne du tableau
+    for (let i = 0; i < numCols; i++) {
+        for (let j = numRows-2; j >= 0; j--) {
+            if (!isEmpty(i, j)) {
+                // Vérifier si la cellule en dessous a la même valeur
+                if (getValue(i, j) === getValue(i, j+1)) {
+                    // Fusionner les valeurs identiques
+                    setValue(i, j+1, 2 * getValue(i, j));
+                    setValue(i, j, '');
+                }
+            }
+        }
+    }
+} 
+
+
+
+// Fonction pour vérifier si une case vaut 2048
+function checkWin() {
+    const table = document.querySelector('table');
+    const cells = table.querySelectorAll('td');
+    for (let cell of cells) {
+        if (parseInt(cell.textContent) === 2048) {
+            alert("Gagné !");
+            return true;
+        }
+    }
+    return false;
+}
+
+// Fonction pour calculer et afficher le score
+function calculateScore() {
+    const table = document.querySelector('table');
+    const cells = table.querySelectorAll('td');
+    let score = 0;
+    for (let cell of cells) {
+        score += parseInt(cell.textContent) || 0;
+    }
+    document.getElementById('score').textContent = `Score: ${score}`;
+}
+
+// Fonction pour vérifier si aucun mouvement n'est possible
+function isBlocked() {
+    const table = document.querySelector('table');
+    const rows = table.querySelectorAll('tr');
+    const numRows = rows.length;
+    const numCols = rows[0].querySelectorAll('td').length;
+
+    for (let i = 0; i < numRows; i++) {
+        for (let j = 0; j < numCols; j++) {
+            const cellValue = parseInt(rows[i].cells[j].textContent) || 0;
+            if (cellValue === 0) return false; // Si une case est vide, un mouvement est possible
+            if (j < numCols - 1 && cellValue === (parseInt(rows[i].cells[j + 1].textContent) || 0)) return false; // Vérifie la fusion possible à droite
+            if (i < numRows - 1 && cellValue === (parseInt(rows[i + 1].cells[j].textContent) || 0)) return false; // Vérifie la fusion possible en bas
+        }
+    }
+    alert("Bloqué !");
+    return true;
+}
+
+// Fonction pour mettre à jour le jeu après chaque mouvement
+function updateGame() {
+    if (checkWin()) return;
+    calculateScore();
+    if (isBlocked()) return;
+}
+
+// Appeler updateGame après chaque mouvement
+function right() {
+    moveRight();
+    fusionRight();
+    moveRight();
+    newGame();
+    updateGame();
+}
+
+function left() {
+    moveLeft();
+    fusionLeft();
+    moveLeft();
+    newGame();
+    updateGame();
+}
+
+function up() {
+    moveUp();
+    fusionUp();
+    moveUp();
+    newGame();
+    updateGame();
+}
+
+function down() {
+    moveDown();
+    fusionDown();
+    moveDown();
+    newGame();
+    updateGame();
+}
