@@ -1,0 +1,36 @@
+/* styles.css */
+body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    font-family: Arial, sans-serif;
+}
+
+table {
+    border-collapse: collapse;
+    background-color: #f0f0f0;
+    margin: 45px auto;
+}
+td {
+    width: 45px;
+    height: 45px;
+    border: 1px solid black;
+}
+.white-cell {
+    background-color: white;
+}
+
+#ValeurVl{
+margin-top: 20px;
+font-size: 24px;
+font-weight: bold;
+}
+
+#JoueurJr{
+    margin-top: 20px;
+    font-size: 24px;
+    font-weight: bold;
+}
