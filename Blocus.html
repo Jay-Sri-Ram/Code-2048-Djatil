@@ -1,0 +1,56 @@
+<!-- Déclaration du type de document HTML -->
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <!-- Définir l'encodage des caractères -->
+    <meta charset="UTF-8">
+    <!-- Rendre la page responsive -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Titre de la page -->
+    <title>Jeu de Blokus</title>
+    <!-- Lien vers le fichier CSS -->
+    <link rel="stylesheet" href="Blocus.css">
+</head>
+<body>
+    <!-- Conteneur principal du jeu -->
+    <div class="game-container">
+        <!-- Section du plateau de jeu -->
+        <div class="board-section">
+            <h2>Blokus</h2>
+            <!-- Grille principale du jeu -->
+            <div id="main-grid" class="game-grid"></div>
+        </div>
+
+        <!-- Section des contrôles -->
+        <div class="controls-section">
+            <!-- Informations sur le joueur -->
+            <div class="player-info">
+                <h3>Joueur: <span id="current-player"></span></h3>
+            </div>
+
+            <!-- Aperçu de la pièce sélectionnée -->
+            <div class="piece-preview">
+                <h3>Pièce sélectionnée</h3>
+                <div id="piece-grid" class="preview-grid"></div>
+            </div>
+
+            <!-- Contrôles de la pièce -->
+            <div class="piece-controls">
+                <h3>Rotation de la pièce</h3>
+                <button id="rotate-left">↺ Rotation Gauche</button>
+                <button id="rotate-right">↻ Rotation Droite</button>
+                <button id="flip-vertical">↕ Retourner Vertical</button>
+                <button id="flip-horizontal">↔ Retourner Horizontal</button>
+            </div>
+
+            <!-- Sélection des pièces disponibles -->
+            <div class="pieces-selection">
+                <h3>Pièces disponibles</h3>
+                <div id="pieces-selector" class="pieces-list"></div>
+            </div>
+        </div>
+    </div>
+    <!-- Lien vers le fichier JavaScript -->
+    <script src="Script-1.js"></script>
+</body>
+</html>
