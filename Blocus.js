@@ -25,7 +25,7 @@ class JeuBlokus {
         this.availablePieces = this.initializePlayerPieces();
         
         // Créer la grille principale et la grille de sélection
-        this.creategrillePrincipa();
+        this.creategrillePrincipal();
         this.creategrilleDeVisualisation();
         // Créer la liste des pièces disponibles
         this.createPiecesList();
@@ -33,8 +33,8 @@ class JeuBlokus {
         // Initialiser les variables pour la pièce sélectionnée et ses transformations
         this.pieceSelectionnee = null;
         this.currentRotation = 0;
-        this.isFlippedVertical = false;
-        this.isFlippedHorizontal = false;
+        this.estRetournerVerticalement = false;
+        this.estRetournerHorizontal = false;
     }
 
     definePiecesBlokus() {
@@ -74,7 +74,7 @@ class JeuBlokus {
         };
     }
 
-    creategrillePrincipa() {
+    creategrillePrincipal() {
         // Créer la grille principale de 20x20
         const grillePrincipal = document.getElementById('main-grid');
         grillePrincipal.innerHTML = '';
@@ -139,8 +139,8 @@ class JeuBlokus {
         // Sélectionner une pièce
         this.pieceSelectionnee = this.pieces[pieceName]; // Sélectionner la pièce
         this.currentRotation = 0; // Réinitialiser la rotation de la pièce sélectionnée à 0
-        this.isFlippedVertical = false; // Réinitialiser le flip vertical de la pièce sélectionnée
-        this.isFlippedHorizontal = false; // Réinitialiser le flip horizontal de la pièce sélectionnée
+        this.estRetournerVerticalement = false; // Réinitialiser le flip vertical de la pièce sélectionnée
+        this.estRetournerHorizontal = false; // Réinitialiser le flip horizontal de la pièce sélectionnée
         this.updateSelectionGrid(); // Mettre à jour la grille de sélection avec la pièce sélectionnée
     }
 
@@ -149,10 +149,10 @@ class JeuBlokus {
         let transformed = JSON.parse(JSON.stringify(piece)); // Copier la pièce
 
         // Appliquer les transformations à la pièce copiée (rotation et flip)
-        if (this.isFlippedVertical) {
+        if (this.estRetournerVerticalement) {
             transformed = this.flipPieceVertical(transformed);// Retourner la pièce verticalement
         }
-        if (this.isFlippedHorizontal) {
+        if (this.estRetournerHorizontal) {
             transformed = this.flipPieceHorizontal(transformed);// Retourner la pièce horizontalement
         }
         if (this.currentRotation !== 0) {
@@ -431,14 +431,14 @@ class JeuBlokus {
     flipVertical() {
         // Retourner la pièce sélectionnée verticalement
         if (!this.pieceSelectionnee) return;
-        this.isFlippedVertical = !this.isFlippedVertical;
+        this.estRetournerVerticalement = !this.estRetournerVerticalement;
         this.updateSelectionGrid();
     }
 
     flipHorizontal() {
         // Retourner la pièce sélectionnée horizontalement
         if (!this.pieceSelectionnee) return;
-        this.isFlippedHorizontal = !this.isFlippedHorizontal;
+        this.estRetournerHorizontal = !this.estRetournerHorizontal;
         this.updateSelectionGrid();
     }
 
